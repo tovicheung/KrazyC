@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 int main() {
-    printf("Hi!");
-    return 0;
-}
+    if (1 + 1 == 2) {
+        printf("Hi!");
+    }
+    if (1 + 2 == 2) {
+        printf("Hello");
