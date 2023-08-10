@@ -1,4 +1,5 @@
 import sys
+import os
 from typing import Optional
 
 print("KrazyC Transpiler")
@@ -19,8 +20,6 @@ def get_indent(line: str) -> int:
     return len(line) - len(line.lstrip(" "))
 
 def transpile(infilename: str, outfilename: str):
-    print(f"Transpiling {infilename} to {outfilename} ...")
-
     indent: int = 0
     indents: list[int] = [0]
     enterscope = False
@@ -64,15 +63,26 @@ def transpile(infilename: str, outfilename: str):
 def transpile_file(infilename: str, outfilename: Optional[str] = None):
     if outfilename is None:
         outfilename = "".join(infilename.split(".")[:-1]) + ".c"
+
+    print(f"Transpiling {infilename} to {outfilename} ...")
+
+    tempfilename = ".krazyc-transpile." + outfilename # don't expose partially transpiled file
+
     try:
-        transpile(infilename, outfilename)
+        transpile(infilename, tempfilename)
     except TranspilerError as e:
         print(e)
+        os.remove(tempfilename)
+    else:
+        os.replace(tempfilename, outfilename)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 transpiler [INFILE]")
+    if len(sys.argv) not in (2, 3):
+        print("Usage: python3 transpiler INFILE [OUTFILE]")
         exit(1)
 
     infilename = sys.argv[1]
-    transpile_file(infilename)
+    outfilename = None
+    if len(sys.argv) == 3:
+        outfilename = sys.argv[2]
+    transpile_file(infilename, outfilename)
