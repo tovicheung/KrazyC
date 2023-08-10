@@ -6,3 +6,6 @@ int main() {
     }
     if (1 + 2 == 2) {
         printf("Hello");
+    }
+    return 0;
+}

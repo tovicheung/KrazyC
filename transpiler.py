@@ -47,7 +47,8 @@ def transpile(infilename: str, outfilename: str):
                 while indent != indents.pop():
                     pass
                 indents.append(indent)
-                outfile.write(" " * indent + "}\n")
+                if not (len(line) and line[indent] == "}"):
+                    outfile.write(" " * indent + "}\n")
                 
             if len(line) and line[-1] == ":":
                 line = line[:-1] + " {"
