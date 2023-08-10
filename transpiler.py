@@ -26,12 +26,14 @@ def transpile(infilename: str, outfilename: str):
 
     with (open(infilename) as infile,
           open(outfilename, "w") as outfile):
-        for lineno, line in enumerate(infile):
+        for lineno, line in enumerate(infile, start=1):
             # We don't want blank lines to be detected as "\n"
             if line[-1] == "\n":
                 line = line[:-1]
 
-            if line.strip(" ") == "": # blank line
+            realline = line.strip(" ")
+
+            if realline == "": # blank line
                 outfile.write("\n")
                 continue
 
@@ -42,13 +44,16 @@ def transpile(infilename: str, outfilename: str):
                 enterscope = False
             elif indent != indents[-1]:
                 if indent not in indents:
-                    raise TranspilerError("Indentation error", lineno, line)
+                    raise TranspilerError("Indentation error", lineno, realline)
                 while indent != indents.pop():
                     pass
                 indents.append(indent)
                 if not (len(line) and line[indent] == "}"):
                     outfile.write(" " * indent + "}\n")
-                
+
+            if realline.startswith("goto "):
+                raise TranspilerError("No gotos thanks", lineno, realline)
+
             if len(line) and line[-1] == ":":
                 line = line[:-1] + " {"
                 enterscope = True

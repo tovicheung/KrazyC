@@ -33,8 +33,23 @@ int main():
     return 0;
 ```
 Amazing right?
+## Goto
+Don't use `goto`.
+```C
+int main() {
+    goto label;
+    label:
+        printf("nope");
+}
+```
+```
+Transpiler Error:
+    No gotos thanks
+Line 4 | goto label;
+```
 
 ## Todo
 - Write the transpiler in C
 - Write the transpiler in KrazyC
+- Write a "compiler" where it just transpiles and use gcc
 - World domination
