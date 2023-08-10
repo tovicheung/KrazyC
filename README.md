@@ -33,3 +33,8 @@ int main():
     return 0;
 ```
 Amazing right?
+
+## Todo
+- Write the transpiler in C
+- Write the transpiler in KrazyC
+- World domination
